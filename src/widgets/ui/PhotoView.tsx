@@ -1,0 +1,128 @@
+import React, { FC, useEffect, useRef, useState } from "react"
+import { useAppDispatch, useAppSelector } from "../../app/hooks"
+import { photos, setLastElement } from "../model/slice/catsPhotoSlice"
+import "./styles.css"
+import { classNames } from "../../shared/lib/classNames"
+import { Modal } from "../../shared/ui/Modal"
+import { ObservePhoto } from "../../entities/ObserbePhoto"
+
+interface PhotoViewProps {
+  photoRange: number
+}
+
+export const PhotoView: FC<PhotoViewProps> = ({ photoRange }) => {
+  const catsPhotos = useAppSelector(photos)
+  const catsPhotosLength = catsPhotos.length
+
+  const scrollRef = useRef<HTMLDivElement | null>(null)
+
+  const dispatch = useAppDispatch()
+
+  const [slide, setSlide] = useState(0)
+
+  const [openModal, setModalOpen] = useState(false)
+
+  const nextSlide = () => {
+    setSlide(slide === catsPhotosLength - 1 ? 0 : slide + 1)
+  }
+
+  const prevSlide = () => {
+    setSlide(slide === 0 ? catsPhotosLength - 1 : slide - 1)
+  }
+
+  const handleScroll = (direction: "left" | "right") => {
+    if (scrollRef.current) {
+      const scrollAmount = 50
+      if (direction === "left") {
+        scrollRef.current.scrollLeft -= scrollAmount
+      } else if (direction === "right") {
+        scrollRef.current.scrollLeft += scrollAmount
+      }
+    }
+  }
+
+  const getActualPhoto = () => {
+    return catsPhotos.find((item, index) => index === slide)
+  }
+
+  const getWidth = (): string => {
+    return photoRange * 62 + "px"
+  }
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!scrollRef.current) {
+        return
+      }
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current
+
+      if (Math.ceil(scrollLeft) + clientWidth >= scrollWidth - 50) {
+        dispatch(setLastElement(catsPhotos[catsPhotosLength - 1].name))
+      }
+    }
+
+    scrollRef.current?.addEventListener("scroll", handleScroll)
+
+    return () => {
+      scrollRef.current?.removeEventListener("scroll", handleScroll)
+    }
+  }, [catsPhotos])
+
+  return (
+    <>
+      <div className="wrapper">
+        <div className="carousel">
+          <button onClick={prevSlide} className="arrow left" />
+          {catsPhotos.map((item, idx) => {
+            return (
+              <img
+                src={item.imageUrl}
+                alt={item.name}
+                key={item.imageUrl}
+                className={slide === idx ? "slide" : "slide hidden"}
+                onClick={() => setModalOpen(true)}
+              />
+            )
+          })}
+          <button onClick={nextSlide} className="arrow right" />
+        </div>
+        <div className="previewWrapper">
+          <div className="carouselBut">
+            <button
+              onClick={() => handleScroll("left")}
+              className="arrow left small"
+            />
+          </div>
+          <div
+            ref={scrollRef}
+            className="preview"
+            style={{ maxWidth: getWidth() }}
+          >
+            {catsPhotos.map((item, idx) => {
+              return (
+                <img
+                  key={item.id}
+                  src={item.imageUrl}
+                  alt={item.name}
+                  className={classNames("indicator", {
+                    indicatorInactive: slide !== idx,
+                  })}
+                  onClick={() => setSlide(idx)}
+                />
+              )
+            })}
+          </div>
+          <div className="carouselBut">
+            <button
+              onClick={() => handleScroll("right")}
+              className="arrow right small"
+            />
+          </div>
+        </div>
+      </div>
+      <Modal isOpen={openModal} onClose={() => setModalOpen(false)}>
+        <ObservePhoto photo={getActualPhoto()} />
+      </Modal>
+    </>
+  )
+}

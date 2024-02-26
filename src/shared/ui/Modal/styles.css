@@ -1,0 +1,31 @@
+.modal {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.content {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    border-radius: 12px;
+    width: 1190px;
+    height: 700px;
+    max-width: 60%;
+    z-index: 1000;
+}
+
+.opened {
+    pointer-events: auto;
+    opacity: 1;
+    z-index: 1000;
+}
+
