@@ -10,6 +10,8 @@ interface PhotoViewProps {
   photoRange: number
 }
 
+const SCROLL_AMOUNT = 50
+
 export const PhotoView: FC<PhotoViewProps> = ({ photoRange }) => {
   const catsPhotos = useAppSelector(photos)
   const catsPhotosLength = catsPhotos.length
@@ -32,11 +34,10 @@ export const PhotoView: FC<PhotoViewProps> = ({ photoRange }) => {
 
   const handleScroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
-      const scrollAmount = 50
       if (direction === "left") {
-        scrollRef.current.scrollLeft -= scrollAmount
+        scrollRef.current.scrollLeft -= SCROLL_AMOUNT
       } else if (direction === "right") {
-        scrollRef.current.scrollLeft += scrollAmount
+        scrollRef.current.scrollLeft += SCROLL_AMOUNT
       }
     }
   }
@@ -56,7 +57,7 @@ export const PhotoView: FC<PhotoViewProps> = ({ photoRange }) => {
       }
       const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current
 
-      if (Math.ceil(scrollLeft) + clientWidth >= scrollWidth - 50) {
+      if (Math.ceil(scrollLeft) + clientWidth >= scrollWidth - SCROLL_AMOUNT) {
         dispatch(setLastElement(catsPhotos[catsPhotosLength - 1].name))
       }
     }
@@ -79,7 +80,9 @@ export const PhotoView: FC<PhotoViewProps> = ({ photoRange }) => {
                 src={item.imageUrl}
                 alt={item.name}
                 key={item.imageUrl}
-                className={slide === idx ? "slide" : "slide hidden"}
+                className={classNames("slide", {
+                  hidden: slide !== idx,
+                })}
                 onClick={() => setModalOpen(true)}
               />
             )
