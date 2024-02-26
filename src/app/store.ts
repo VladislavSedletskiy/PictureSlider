@@ -2,7 +2,7 @@ import type { Action, ThunkAction } from "@reduxjs/toolkit"
 import { combineSlices, configureStore } from "@reduxjs/toolkit"
 import { setupListeners } from "@reduxjs/toolkit/query"
 import {commonApi} from "../shared/api/commonApi/commonApi";
-import {catsPhotoSlice} from "../widgets/model/slice/catsPhotoSlice";
+import {catsPhotoSlice} from "../widgets/PhotoView/model/slice/catsPhotoSlice";
 
 
 const rootReducer = combineSlices(commonApi, catsPhotoSlice)

@@ -1,8 +1,11 @@
 import { useGetCatsPostsQuery } from "../../../shared/api/commonApi/commonApi"
-import { PhotoView } from "../../../widgets"
+
+import { PhotoView } from "../../../widgets/PhotoView"
+import { lastElement } from "../../../widgets/PhotoView/model/slice/catsPhotoSlice"
+
+import { useAppSelector } from "../../../shared/hook/hooks"
+
 import "./styles.css"
-import { useAppSelector } from "../../../app/hooks"
-import { lastElement } from "../../../widgets/model/slice/catsPhotoSlice"
 
 export const MainPage = () => {
   const lastPicture = useAppSelector(lastElement)

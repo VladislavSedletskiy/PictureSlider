@@ -1,10 +1,15 @@
 import React, { FC, useEffect, useRef, useState } from "react"
-import { useAppDispatch, useAppSelector } from "../../app/hooks"
+
 import { photos, setLastElement } from "../model/slice/catsPhotoSlice"
+
+import { ObservePhoto } from "../../../entities/ObserbePhoto"
+
+import { useAppDispatch, useAppSelector } from "../../../shared/hook/hooks"
+
+import { classNames } from "../../../shared/lib/classNames"
+import { Modal } from "../../../shared/ui/Modal"
+
 import "./styles.css"
-import { classNames } from "../../shared/lib/classNames"
-import { Modal } from "../../shared/ui/Modal"
-import { ObservePhoto } from "../../entities/ObserbePhoto"
 
 interface PhotoViewProps {
   photoRange: number
@@ -73,7 +78,7 @@ export const PhotoView: FC<PhotoViewProps> = ({ photoRange }) => {
     <>
       <div className="wrapper">
         <div className="carousel">
-          <button onClick={prevSlide} className="arrow left" />
+          <button onClick={prevSlide} className="arrow arrow-left" />
           {catsPhotos.map((item, idx) => {
             return (
               <img
@@ -87,13 +92,13 @@ export const PhotoView: FC<PhotoViewProps> = ({ photoRange }) => {
               />
             )
           })}
-          <button onClick={nextSlide} className="arrow right" />
+          <button onClick={nextSlide} className="arrow arrow-right" />
         </div>
         <div className="previewWrapper">
           <div className="carouselBut">
             <button
               onClick={() => handleScroll("left")}
-              className="arrow left small"
+              className="arrow arrow-left arrow-small"
             />
           </div>
           <div
@@ -118,7 +123,7 @@ export const PhotoView: FC<PhotoViewProps> = ({ photoRange }) => {
           <div className="carouselBut">
             <button
               onClick={() => handleScroll("right")}
-              className="arrow right small"
+              className="arrow arrow-right arrow-small"
             />
           </div>
         </div>

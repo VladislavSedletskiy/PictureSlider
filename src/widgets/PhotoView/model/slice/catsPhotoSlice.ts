@@ -1,7 +1,7 @@
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { commonApi } from "../../../shared/api/commonApi/commonApi"
-import { ICatsPhoto } from "../../../shared/model/catPhotosShema"
-import { RootState } from "../../../app/store"
+import { commonApi } from "../../../../shared/api/commonApi/commonApi"
+import { ICatsPhoto } from "../../../../shared/model/catPhotosShema"
+import { RootState } from "../../../../app/store"
 
 interface IPoolState {
   lastElement: string | null
